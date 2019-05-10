@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block content1 %}
+      <br><form method="POST" action="{% url 'script' %}">
+                  {% csrf_token %}
+      <!-- <input name="range" type="range" min="10" max="20" name="slider" id="slider" style="width:50%;" /> -->
+      <style>
+            .slidecontainer {
+              width: 100%;
+            }
+            
+            .slider {
+              -webkit-appearance: none;
+              width: 100%;
+              height: 15px;
+              border-radius: 5px;
+              background: maroon;
+              outline: none;
+              opacity: 0.7;
+              -webkit-transition: .2s;
+              transition: opacity .2s;
+            }
+            
+            .slider:hover {
+              opacity: 1;
+            }
+            
+            .slider::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              appearance: none;
+              width: 25px;
+              height: 25px;
+              border-radius: 50%;
+              background: maroon;
+              cursor: pointer;
+            }
+            
+            .slider::-moz-range-thumb {
+              width: 25px;
+              height: 25px;
+              border-radius: 50%;
+              background: green;
+              cursor: pointer;
+            }
+            </style>
+
+            
+            <div class="slidecontainer">
+              <input name="range" type="range" min="10" max="20" value="15" class="slider" id="myRange" style="width:50%;background-color:maroon;">
+              <p>Value: <span id="demo"></span></p>
+            </div>
+            
+            <script>
+            var slider = document.getElementById("myRange");
+            var output = document.getElementById("demo");
+            output.innerHTML = slider.value;
+            
+            slider.oninput = function() {
+              output.innerHTML = this.value;
+            }
+            </script>
+                   <button class="btn btn-success my-2 my-sm-0" onclick="location.href='{% url 'script' %}'" type="submit">Generate</button></form>
+
+      {% if data %}
+      <!-- <hr> <button class="btn btn-danger" onclick="copypassword()">Copy to clipboard</button> -->
+      {% endif %}
+{% endblock %}
+
+{% block content2 %}
+{% if data %}
+<div class="card text-center">
+      <div class="card-header" style="background-color:#6495ED">
+            <h3> Your password is : <h1> {{data}}</h1></h3>
+      </div>
+      <div class="card-body" style="background-color:#20B2AA">
+        
+      You can convert the password to a QRCode and also check its strength<br><br>
+        <button class="btn btn-primary my-2 my-sm-0" onclick="location.href='{% url 'code' %}'" type="submit">Generate Qrcode</button>
+        <button class="btn btn-success my-2 my-sm-0" onclick="location.href='{% url 'pass' %}'" type="submit">Check Strength</button>
+
+      </div>
+      <div class="card-footer" style="background-color:#00FFFF;">
+       Open QR Code and scan to read password
+      </div>
+    </div>
+    <script>
+      //     function copypassword()
+      //     {
+      //           document.getElementById('copydata').select();
+      //           document.execCommand('Copy');
+      //           alert('Password copied to clipboard!');
+      //     }
+     
+    </script>
+
+{% endif %}
+{% endblock %}
+
+{% block content3 %}
+{% if pass_strength_fast %}
+<br>
+    <center>
+      <h1> Assuming 10 billion guess per second it takes {{pass_strength_fast}} to crack this password</h1>
+    </center>
+<hr>
+{% endif %}
+{% if pass_strength_slow %}
+    <center>
+      <h1> Assuming 10 thousand guess per second it takes {{pass_strength_slow}} to crack this password</h1>
+    </center>
+  <br>
+{% endif %}
+{% endblock %}
