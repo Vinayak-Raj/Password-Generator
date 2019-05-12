@@ -2,6 +2,8 @@ from django.shortcuts import render
 from . import logic
 import pyqrcode
 from zxcvbn import zxcvbn
+from django.shortcuts import HttpResponse
+from PIL import Image 
 # Create your views here.
 
 def button(request):
@@ -32,3 +34,11 @@ def strength(request):
                 'pass_strength_slow':pass_strength_slow,
         }
         return render(request,'home.html',context)
+
+def secureImage(request):
+        code = pyqrcode.create(data)
+        code.png('code.png',scale=7)
+        response = HttpResponse(content_type="image/png")
+        img = Image.open('code.png')
+        img.save(response,'png')
+        return response
